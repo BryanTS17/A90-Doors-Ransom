@@ -111,8 +111,8 @@ class JanelaMain(QWidget):
         else:
             self.timer.stop()
             self.cronometro.setText("00:00")
-            # os.system('start cmd /k "color 1 && cd /d c:\\ && dir /s"')
-            # subprocess.run(["shutdown", "/s", "/t", "0"])
+            os.system('start cmd /k "color 1 && cd /d c:\\ && dir /s"')
+            subprocess.run(["shutdown", "/s", "/t", "0"])
 
     def atualizarMoedas(self):
         self.moedas.setText(f"{Globais.Moedas}")

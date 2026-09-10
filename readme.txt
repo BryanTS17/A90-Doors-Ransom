@@ -1,0 +1,1 @@
+python -m PyInstaller --onefile --add-data "imagens;imagens" --add-data "sons;sons" --add-data "videos;videos" --clean main.py

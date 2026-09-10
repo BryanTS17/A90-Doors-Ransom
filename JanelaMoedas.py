@@ -49,5 +49,5 @@ class JanelaMoeda(QWidget):
         return super().resizeEvent(event)
 
     def coletado(self):
-        Globais.Moedas -= 250
+        Globais.Moedas -= 20
         self.close()

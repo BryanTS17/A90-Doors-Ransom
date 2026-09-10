@@ -220,7 +220,7 @@ def iniciar_jogo():
     timer5.start(100)  # 1000 ms = 1 segundo
 
     timer6.timeout.connect(mover_mouse_aleatorio)
-    timer6.start(10000)  # 1000 ms = 1 segundo
+    timer6.start(5000)  # 1000 ms = 1 segundo
 
     mudar_wallpaper(
         BG.caminho_recurso(r"imagens\\Captura de tela 2026-09-09 194707.png")
