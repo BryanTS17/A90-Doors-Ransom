@@ -14,7 +14,7 @@ class JanelaPopUp(QWidget):
         super().__init__(*args, **kwargs)
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         self.setWindowTitle("RANS0M")
-        if x and y:
+        if x != None and y != None:
             self.resize(300, 150)
             self.move(x, y)
         else:
@@ -68,7 +68,6 @@ class JanelaPopUp(QWidget):
 def abrir_janela(x=None, y=None, tremer=True, imagem=None):
     janelaPop = JanelaPopUp(x=x, y=y, tremer=tremer, imagem=imagem)
 
-    # Guarda a referência para a janela não ser destruída
     Globais.janelas.append(janelaPop)
 
     janelaPop.destroyed.connect(

@@ -14,7 +14,7 @@ class JanelaCara(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         self.resize(200, 200)
 
-        if x and y:
+        if x != None and y != None:
             self.move(x, y)
         else:
             self.move(random.randint(0, 1900), random.randint(0, 1000))
@@ -23,7 +23,7 @@ class JanelaCara(QWidget):
 
         self.fundo.setStyleSheet("background-color: transparent;")
 
-        if imagem == None:
+        if imagem is None:
             self.pixmap = QPixmap(random.choice(list(BG.Caras)).value)
         else:
             self.pixmap = QPixmap(imagem)
@@ -61,7 +61,6 @@ class JanelaCara(QWidget):
 def abrir_janela(x=None, y=None, imagem=None, tempo=100):
     janelaCara = JanelaCara(x=x, y=y, imagem=imagem, tempo=tempo)
 
-    # Guarda a referência para a janela não ser destruída
     Globais.caras.append(janelaCara)
     janelaCara.destroyed.connect(
         lambda: (

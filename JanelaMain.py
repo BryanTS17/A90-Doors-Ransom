@@ -62,11 +62,12 @@ class JanelaMain(QWidget):
         self.moedas.raise_()
         self.moedas.setStyleSheet("color: yellow; font-size: 50px; font-weight: bold;")
 
+        # cronometro
+
         self.timerM = QTimer(self)
         self.timerM.timeout.connect(self.atualizarMoedas)
         self.timerM.start(100)
 
-        # Tempo inicial
         # Timer que atualiza o cronômetro
 
         self.setWindowFlags(

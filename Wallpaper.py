@@ -17,7 +17,7 @@ def mudar_wallpaper(caminho):
         20,  # SPI_SETDESKWALLPAPER
         0,
         caminho,
-        3,  # Atualiza a configuração e transmite a mudança
+        3,  # atualiza a configuração e transmite a mudança
     )
 
     if not resultado:
